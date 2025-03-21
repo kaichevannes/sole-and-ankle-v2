@@ -1,9 +1,23 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { COLORS, WEIGHTS } from '../../constants';
-import { formatPrice, pluralize, isNewShoe } from '../../utils';
-import Spacer from '../Spacer';
+import { COLORS, WEIGHTS } from "../../constants";
+import { formatPrice, pluralize, isNewShoe } from "../../utils";
+import Spacer from "../Spacer";
+
+const STYLES = {
+  "on-sale": {
+    text: "Sale",
+    color: COLORS.primary,
+  },
+  "new-release": {
+    text: "Just Released!",
+    color: COLORS.secondary,
+  },
+  default: {
+    text: "",
+  },
+};
 
 const ShoeCard = ({
   slug,
@@ -31,37 +45,65 @@ const ShoeCard = ({
       ? 'new-release'
       : 'default'
 
+  const styles = STYLES[variant];
+
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
         </ImageWrapper>
+        <Flag style={{ "--background-color": styles.color }}>
+          <FlagText>{styles.text}</FlagText>
+        </Flag>
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
           <Price>{formatPrice(price)}</Price>
         </Row>
         <Row>
-          <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          <ColorInfo>{pluralize("Color", numOfColors)}</ColorInfo>
         </Row>
       </Wrapper>
     </Link>
   );
 };
 
+const Flag = styled.div`
+  position: absolute;
+  top: 12px;
+  right: -4px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  height: 32px;
+  padding: 8px 12px;
+  color: white;
+  background-color: var(--background-color);
+  border-radius: 2px;
+`;
+
+const FlagText = styled.p`
+  font-weight: 600;
+  font-size: ${14 / 16}rem;
+`;
+
 const Link = styled.a`
   text-decoration: none;
   color: inherit;
 `;
 
-const Wrapper = styled.article``;
+const Wrapper = styled.article`
+  position: relative;
+`;
 
 const ImageWrapper = styled.div`
   position: relative;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  width: 100%;
+`;
 
 const Row = styled.div`
   font-size: 1rem;
